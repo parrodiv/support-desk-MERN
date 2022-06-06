@@ -1,1 +1,8 @@
-console.log('Server...');
+const express = require('express');
+const PORT = 5000;
+
+const app = express()
+
+
+
+app.listen(PORT, () => console.log(`Example app listening on ${PORT}`))
