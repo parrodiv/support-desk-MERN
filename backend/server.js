@@ -13,5 +13,9 @@ app.get('/', (req, res) => {
   res.status(200).json({message: 'Welcome to the Support Desk API'})
 })
 
+// Connect endpoint to userRoutes
+// in postman you'll get a "Register Route" response or "Login Route" if endpoint is /api/users/login
+app.use('/api/users', require('./routes/userRoutes'))
+
 
 app.listen(PORT, () => console.log(`Example app listening on ${PORT}`))
