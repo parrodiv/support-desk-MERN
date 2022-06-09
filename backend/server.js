@@ -11,6 +11,7 @@ const PORT = process.env.PORT || 8000;
 
 const app = express()
 
+// BODY MIDDLEWARE PARSER
 app.use(express.json()) //for body -> raw (json)
 app.use(express.urlencoded({extended: false})) // for body -> x-www-urlformencoded
 //NOW WE CAN GET DATA FROM THE BODY ({name, email, password})
