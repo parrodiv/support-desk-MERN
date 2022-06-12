@@ -33,6 +33,15 @@ function Register() {
 
     if (password !== password2) {
       toast.error('Passwords do not match');
+    } else {
+      const userData = {
+        name,
+        email,
+        password
+      }
+
+      dispatch(register(userData))
+       //this will console.log user from authSlice register function (user) is a parameter
     }
   };
 
@@ -40,7 +49,7 @@ function Register() {
     <>
       <section className="heading">
         <h1>
-          <FaUser /> Register {user}
+          <FaUser /> Register
         </h1>
         <p>Please create an account</p>
       </section>
