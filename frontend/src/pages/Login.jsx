@@ -1,16 +1,23 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { FaSignInAlt } from 'react-icons/fa';
+import { useSelector, useDispatch } from 'react-redux';
+import { login } from '../features/auth/authSlice';
 
 function Login() {
   const [formData, setFormData] = useState({
-    name: '',
     email: '',
     password: '',
-    password2: '',
   });
 
-  const { name, email, password, password2 } = formData;
+  const { email, password } = formData;
+
+  const dispatch = useDispatch();
+
+  //destructure of initialState from authSlice
+  const { user, isLoading, isSuccess, message } = useSelector(
+    (state) => state.auth
+  );
 
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -22,9 +29,13 @@ function Login() {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    if (password !== password2) {
-      toast.error('Passwords do not match');
-    }
+    const userData = {
+      email,
+      password,
+    };
+
+    dispatch(login(userData));
+    //this will console.log user from authSlice login function (user) is a parameter
   };
 
   return (
