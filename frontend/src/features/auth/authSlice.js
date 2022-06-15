@@ -1,8 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import authService from './authService'
 
+//GET USER FROM LOCALSTORAGE
+const user = JSON.parse(localStorage.getItem('user'))
+
 const initialState = {
-  user: null,
+  user: user ? user : null,
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -37,7 +40,14 @@ export const login = createAsyncThunk('auth/login', async (user, thunkAPI) => {
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {},
+  reducers: {
+    reset: (state) => {
+      state.isLoading = false
+      state.isError = false
+      state.isSuccess = false
+      state.message = ''
+    }
+  },
   extraReducers: (builder) => {
     //allow us to add cases builder.addCase e.g.(register, pending, fulfilled ...) and how do we want to change the state when the register is fulfilled
     builder 
@@ -58,4 +68,5 @@ export const authSlice = createSlice({
   },
 });
 
+export const {reset} = authSlice.actions
 export default authSlice.reducer;
