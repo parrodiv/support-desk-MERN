@@ -36,6 +36,11 @@ export const login = createAsyncThunk('auth/login', async (user, thunkAPI) => {
   console.log(user);
 });
 
+// Logout user
+export const logout = createAsyncThunk('auth/logout', async () => {
+  await authService.logout()
+})
+
 
 export const authSlice = createSlice({
   name: 'auth',
@@ -50,6 +55,7 @@ export const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     //allow us to add cases builder.addCase e.g.(register, pending, fulfilled ...) and how do we want to change the state when the register is fulfilled
+
     builder 
       .addCase(register.pending, state => {
         state.isLoading = true
@@ -57,13 +63,16 @@ export const authSlice = createSlice({
       .addCase(register.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
-        state.user = action.payload //dispatch(register(user))
+        state.user = action.payload //dispatch(register(user)) sarebbe user obj 
       })
       .addCase(register.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
         state.message = action.payload //thunkAPI.rejectWithValue
         state.user = null 
+      })
+      .addCase(logout.fulfilled, (state) => {
+        state.user = null
       })
   },
 });
