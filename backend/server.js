@@ -24,9 +24,12 @@ app.get('/', (req, res) => {
   res.status(200).json({message: 'Welcome to the Support Desk API'})
 })
 
-// Routes
+// Routes for users
 // in postman you'll get a "Register Route" response or "Login Route" if endpoint is /api/users/login
 app.use('/api/users', require('./routes/userRoutes'))
+
+// Routes for tickets
+app.use('/api/tickets', require('./routes/ticketRoutes'))
 
 app.use(errorHandler)
 
