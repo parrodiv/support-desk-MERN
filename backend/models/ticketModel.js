@@ -30,3 +30,7 @@ const ticketSchema = mongoose.Schema(
 );
 
 module.exports = mongoose.model('Ticket', ticketSchema);
+
+// "The first argument is the singular name of the collection your model is for. Mongoose automatically looks for the plural version of your model name." --> tickets
+
+// source: https://www.npmjs.com/package/mongoose
