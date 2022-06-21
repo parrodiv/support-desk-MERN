@@ -11,6 +11,8 @@ const getTickets = asyncHandler(async(req, res) => {
 
   // Get user using the id in the JWT
   const user = await User.findById(req.user.id)
+  //NON E' NECESSARIO OTTENERE L'USER ESSENDO CHE ATTRAVERSO LA FUNZIONE protect OTTENIAMO GIA' L'USER CON authMiddleware
+  
   //Mongoose provides a 'getter' function on the Model for us that returns the _id as a string value. You access that getter with Query.id or Model.id
   // So id won't show in the console log of the query because that's just an object with key value pairs and the getter function is on the prototype.
 
@@ -42,7 +44,7 @@ const createTicket = asyncHandler(async(req, res) => {
   }
 
   // Create ticket 
-  const ticket = Ticket.create({
+  const ticket = await Ticket.create({
     product,
     description,
     user: req.user.id,
