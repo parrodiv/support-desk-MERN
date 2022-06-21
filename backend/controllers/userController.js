@@ -38,6 +38,8 @@ const registerUser = asyncHandler(async(req, res) => {
     password: hashedPassword
   })
 
+  console.log(user)
+
   if(user) {
     res.status(201).json({
       _id: user._id,
