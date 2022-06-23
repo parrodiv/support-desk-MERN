@@ -1,69 +1,101 @@
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { toast } from 'react-toastify'
+import { createTicket, reset } from '../features/tickets/ticketSlice'
+import Spinner from '../components/Spinner'
+import BackButton from '../components/BackButton'
 
 const NewTicket = () => {
   // get user from global state authSlice
-  const { user } = useSelector((state) => state.auth);
-  console.log(user);
+  const { user } = useSelector((state) => state.auth)
+  console.log(user)
 
-  const [name] = useState(user.name);
-  const [email] = useState(user.email);
-  const [product, setProduct] = useState('');
-  const [description, setDescription] = useState('');
+  //desctructure of initialState from ticketSlice
+  const { isError, isSuccess, message, isLoading } = useSelector(
+    (state) => state.ticket
+  )
+
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  const [name] = useState(user.name)
+  const [email] = useState(user.email)
+  const [product, setProduct] = useState('iPhone')
+  const [description, setDescription] = useState('')
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(message)
+    }
+
+    if (isSuccess) {
+      dispatch(reset())
+      navigate('/tickets')
+    }
+
+    dispatch(reset())
+  }, [isError, isSuccess, message, navigate, dispatch])
 
   const onSubmit = (e) => {
-    e.preventDefault();
-  };
+    e.preventDefault()
+    dispatch(createTicket({ product, description }))
+  }
+
+  if (isLoading) {
+    return <Spinner />
+  }
 
   return (
     <>
-      <section className="heading">
+      <BackButton url='/' />
+      <section className='heading'>
         <h1>Create New Ticket</h1>
         <p>Please fill out the form</p>
       </section>
 
-      <section className="form">
-        <div className="form-group">
-          <label htmlFor="name">Customer Name</label>
-          <input type="text" className="form-control" value={name} disabled />
+      <section className='form'>
+        <div className='form-group'>
+          <label htmlFor='name'>Customer Name</label>
+          <input type='text' className='form-control' value={name} disabled />
         </div>
-        <div className="form-group">
-          <label htmlFor="email">Customer Email</label>
-          <input type="text" className="form-control" value={email} disabled />
+        <div className='form-group'>
+          <label htmlFor='email'>Customer Email</label>
+          <input type='text' className='form-control' value={email} disabled />
         </div>
-        <div className="form-group">
-          <form onSubmit={onSubmit}>
-            <label htmlFor="product">Product</label>
+        <form onSubmit={onSubmit}>
+          <div className='form-group'>
+            <label htmlFor='product'>Product</label>
             <select
-              name="product"
-              id="product"
+              name='product'
+              id='product'
               value={product}
               onChange={(e) => setProduct(e.target.value)}
             >
-              <option value="iPhone">iPhone</option>
-              <option value="Macbook Pro">Macbook Pro</option>
-              <option value="iMac">iMac</option>
-              <option value="iPad">iPad</option>
+              <option value='iPhone'>iPhone</option>
+              <option value='Macbook Pro'>Macbook Pro</option>
+              <option value='iMac'>iMac</option>
+              <option value='iPad'>iPad</option>
             </select>
-          </form>
-        </div>
-        <div className="form-group">
-          <label htmlFor="description">Description of the issue</label>
-          <textarea
-            name="description"
-            id="description"
-            placeholder="Description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="form-control"
-          ></textarea>
-        </div>
-        <div className="form-grou">
-          <button className="btn btn-block">Submit</button>
-        </div>
+          </div>
+          <div className='form-group'>
+            <label htmlFor='description'>Description of the issue</label>
+            <textarea
+              name='description'
+              id='description'
+              placeholder='Description'
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className='form-control'
+            ></textarea>
+          </div>
+          <div className='form-group'>
+            <button className='btn btn-block'>Submit</button>
+          </div>
+        </form>
       </section>
     </>
-  );
-};
+  )
+}
 
-export default NewTicket;
+export default NewTicket
