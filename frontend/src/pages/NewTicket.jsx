@@ -13,7 +13,7 @@ const NewTicket = () => {
 
   //desctructure of initialState from ticketSlice
   const { isError, isSuccess, message, isLoading } = useSelector(
-    (state) => state.ticket
+    (state) => state.tickets
   )
 
   const dispatch = useDispatch()
