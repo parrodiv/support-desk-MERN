@@ -71,11 +71,37 @@ export const getTicket = createAsyncThunk(
   }
 )
 
+// Close ticket
+export const closeTicket = createAsyncThunk(
+  'tickets/close',
+  async (ticketId, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user.token
+      return await ticketService.closeTicket(ticketId, token)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
 export const ticketSlice = createSlice({
   name: 'ticket',
   initialState,
   reducers: {
-    reset: (state) => initialState,
+    reset: (state) => {
+      state.isLoading = false
+      state.isError = false
+      state.isSuccess = false
+      state.message = ''
+      state.ticket = {}
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -116,6 +142,16 @@ export const ticketSlice = createSlice({
         state.isLoading = false
         state.isError = true
         state.message = action.payload //thunkAPI.rejectWithValue
+      })
+      .addCase(closeTicket.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.tickets.map((ticket) =>
+          ticket._id === action.payload._id
+            ? (ticket.status = 'closed')
+            : ticket
+        )
+        //this is just doing in the UI without having to reload the page to see changes
+        //action.payload is the ticket object updated, in fact the response.data on the .put(protect, updateTicket) will be the ticket obj updated, so we can get te id of ticket from the _id prop
       })
   },
 })

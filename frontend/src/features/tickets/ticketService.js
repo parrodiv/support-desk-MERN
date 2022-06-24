@@ -1,14 +1,14 @@
 import axios from 'axios'
 
 const API_URL = '/api/tickets'
-//with the slash at the beginning you have the absolute path from the app root, otherwise your request is to a url relative to the one you are currently on. 
+//with the slash at the beginning you have the absolute path from the app root, otherwise your request is to a url relative to the one you are currently on.
 
 // Create ticket
 const createTicket = async (ticketData, token) => {
   const config = {
     headers: {
-      Authorization: `Bearer ${token}`
-    }
+      Authorization: `Bearer ${token}`,
+    },
   }
 
   const response = await axios.post(API_URL, ticketData, config)
@@ -20,8 +20,8 @@ const createTicket = async (ticketData, token) => {
 const getTickets = async (token) => {
   const config = {
     headers: {
-      Authorization: `Bearer ${token}`
-    }
+      Authorization: `Bearer ${token}`,
+    },
   }
 
   const response = await axios.get(API_URL, config)
@@ -33,8 +33,8 @@ const getTickets = async (token) => {
 const getTicket = async (ticketId, token) => {
   const config = {
     headers: {
-      Authorization: `Bearer ${token}`
-    }
+      Authorization: `Bearer ${token}`,
+    },
   }
 
   const response = await axios.get(`${API_URL}/${ticketId}`, config)
@@ -42,10 +42,28 @@ const getTicket = async (ticketId, token) => {
   return response.data
 }
 
+// Get user ticket
+const closeTicket = async (ticketId, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+
+  const response = await axios.put(
+    `${API_URL}/${ticketId}`,
+    { status: 'closed' },
+    config
+  )
+
+  return response.data
+}
+
 const ticketService = {
   createTicket,
   getTickets,
-  getTicket
+  getTicket,
+  closeTicket,
 }
 
 export default ticketService
