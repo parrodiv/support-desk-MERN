@@ -48,7 +48,7 @@ const addNote = asyncHandler(async (req, res) => {
     throw new Error('User not authorized')
   }
 
-  const notes = await Note.create({
+  const note = await Note.create({
     text: req.body.text,
     isStaff: false,
     ticket: req.params.ticketId,
@@ -57,7 +57,7 @@ const addNote = asyncHandler(async (req, res) => {
 
   console.log(req);
 
-  res.status(200).json(notes) // it will be response.data in frontend
+  res.status(200).json(note) // it will be response.data in frontend
 })
 
 module.exports = {

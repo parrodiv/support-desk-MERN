@@ -14,7 +14,7 @@ function Tickets() {
   const dispatch = useDispatch()
 
   //you just won't reset success state when you navigate away from the /tickets page, so next time you go to /tickets success will be true, so if you did have a error in fetching the tickets you may not be able to handle that and display something appropriate to the user.
-  // all the first one is doing is returning a function to reset some state which will run when the user navigates away from /tickets i.e. when the Tickets component unmounts.
+  // all the second one is doing is returning a function to reset some state which will run when the user navigates away from /tickets i.e. when the Tickets component unmounts.
   useEffect(() => {
      if (!isSuccess) {
        dispatch(getTickets())
