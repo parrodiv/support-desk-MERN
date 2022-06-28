@@ -29,6 +29,7 @@ const Ticket = () => {
   // Close ticket
   const onTicketClose = () => {
     dispatch(closeTicket(ticketId))
+     //change the status of ticket on backend
     toast.success('Ticket Closed')
     navigate('/tickets')
   }
