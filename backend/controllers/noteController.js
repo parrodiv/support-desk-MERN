@@ -24,7 +24,7 @@ const getNotes = asyncHandler(async (req, res) => {
 
   const notes = await Note.find({ ticket: req.params.ticketId})
 
-  console.log(req);
+  // console.log(req);
 
   res.status(200).json(notes) // it will be response.data in frontend
 })
