@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { getTicket, closeTicket } from '../features/tickets/ticketSlice'
-import { getNotes, reset as notesReset } from '../features/notes/noteSlice'
+import { getNotes, createNote, reset as notesReset } from '../features/notes/noteSlice'
 //nel caso in cui sia già stato utilizzato reset è possibile cambiare il nome per poter usare due tipi di reset da due Slice differenti
 
 import { useParams, useNavigate } from 'react-router-dom'
@@ -66,7 +66,7 @@ const Ticket = () => {
   // Submit note
   const onNoteSubmit = (e) => {
     e.preventDefault()
-    console.log('Submit')
+    dispatch(createNote({noteText, ticketId}))
     closeModal()
   }
 

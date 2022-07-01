@@ -29,6 +29,26 @@ export const getNotes = createAsyncThunk(
   }
 )
 
+// Create ticket note
+export const createNote = createAsyncThunk(
+  'notes/create',
+  async ({noteText, ticketId}, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user.token
+      return await noteService.createNote(noteText, ticketId, token)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
 export const noteSlice = createSlice({
   name: 'note',
   initialState,
@@ -46,6 +66,21 @@ export const noteSlice = createSlice({
         state.notes = action.payload
       })
       .addCase(getNotes.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload //thunkAPI.rejectWithValue
+      })
+      .addCase(createNote.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(createNote.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.notes.push(action.payload) // con redux Toolkit si può fare
+        // se facessi state.notes = action.payload mi darebbe questo errore subito dopo il submit:
+        // notes.map is not a function  (in Ticket.jsx viene fatto un map sul array notes per far vedere tutte le note in lista) pertanto se facciamo semplicemente = action.payload assegnamo a notes, che dovrebbe essere un array, un oggetto contenente le proprietà della nota {_id, user, ticket, text, isStaff, ecc}
+      })
+      .addCase(createNote.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
         state.message = action.payload //thunkAPI.rejectWithValue
