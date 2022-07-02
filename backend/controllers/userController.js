@@ -47,6 +47,7 @@ const registerUser = asyncHandler(async(req, res) => {
       email: user.email,
       token: generateToken(user._id),
     })
+    // nella response vedremo queste 4 proprietà mentre se passassimo user vedremmo tutte le altre (isAdmin, createdAt ecc.)
   } else {
     res.status(400)
     throw new Error('Invalid user data')
